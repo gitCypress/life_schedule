@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^3.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -86,5 +87,13 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: NotoSansSC
+      fonts:
+        - asset: assets/fonts/Noto_Sans_SC/NotoSansSC-Bold.ttf
+        - asset: assets/fonts/Noto_Sans_SC/NotoSansSC-Medium.ttf
+        - asset: assets/fonts/Noto_Sans_SC/NotoSansSC-Regular.ttf
+
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
