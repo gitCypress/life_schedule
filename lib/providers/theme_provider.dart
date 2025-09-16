@@ -1,24 +1,24 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final themeProvider = AsyncNotifierProvider(() => ThemeNotifier());
+part 'theme_provider.g.dart';
 
-class ThemeNotifier extends AsyncNotifier<bool> {
+@riverpod
+// 1. 类名从 ThemeNotifier 改为 Theme，继承自 _$Theme
+class ThemeCustom extends _$ThemeCustom {
   static const _key = 'isDarkMode';
 
+  // 2. build 方法保持不变，它依然负责加载初始状态
   @override
-  Future<bool> build() async{
+  Future<bool> build() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_key) ?? false;
   }
 
-  Future<void> toggleThemeMode() async {
+  // 3. toggleTheme 方法也保持不变
+  Future<void> toggleTheme() async {
     final currentMode = state.value ?? false;
     final newMode = !currentMode;
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_key, newMode);
     state = AsyncData(newMode);

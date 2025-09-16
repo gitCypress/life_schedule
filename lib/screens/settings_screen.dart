@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:life_schedule/providers/theme_provider.dart';
+import '../providers/theme_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkMode = ref.watch(themeProvider);
+    final isDarkMode = ref.watch(themeCustomProvider);
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
@@ -20,7 +20,7 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: const Text('开启或关闭暗色主题'),
           value: isDarkMode.asData?.value ?? false,
           onChanged: (value) {
-            ref.read(themeProvider.notifier).toggleThemeMode();
+            ref.read(themeCustomProvider.notifier).toggleTheme();
           },
         ),
         const SizedBox(height: 24,),

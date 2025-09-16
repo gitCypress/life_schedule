@@ -339,7 +339,7 @@ class MaterialGreenTheme {
      brightness: colorScheme.brightness,
      colorScheme: colorScheme,
      fontFamily: 'NotoSansSC',
-     scaffoldBackgroundColor: colorScheme.background,
+     scaffoldBackgroundColor: colorScheme.surface,
      canvasColor: colorScheme.surface,
   );
 

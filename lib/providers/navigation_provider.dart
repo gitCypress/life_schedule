@@ -1,4 +1,16 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-// 底部导航栏当前选中的索引
-final navigationIndexProvider = StateProvider<int>((ref) => 0);
+// 1. 必须添加 part 指令，指向将要生成的代码文件。
+part 'navigation_provider.g.dart';
+
+@riverpod
+class NavigationIndex extends _$NavigationIndex {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void setIndex(int newIndex) {
+    state = newIndex;
+  }
+}
