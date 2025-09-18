@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:life_schedule/screens/calender_screen.dart';
 import 'package:life_schedule/screens/expense_tracking_screen.dart';
 import '../models/nav_destination.dart';
-import '../screens/home_screen.dart';
+import '../screens/todo_screen.dart';
 import '../screens/settings_screen.dart';
 
 /// App 导航目的地配置
 final List<NavDestination> appNavDestinations = [
   const NavDestination(
-    screen: HomeScreen(),
+    screen: TodoScreen(),
     icon: Icons.home_outlined,
     label: '首页',
   ),

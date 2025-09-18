@@ -5,6 +5,6 @@ class ExpenseTrackingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('这是记账页'));
+    return const Center(child: Text('这是记账页'));
   }
 }
