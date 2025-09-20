@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:life_schedule/mixins/fab_screen_mixin.dart';
+import 'package:life_schedule/mixins/navigable_screen_mixin.dart';
 
 import 'package:life_schedule/providers/ui/navigation_provider.dart';
+import 'package:life_schedule/providers/ui/screen_manifest_provider.dart';
 import 'package:life_schedule/providers/ui/theme_provider.dart';
-import 'package:life_schedule/providers/ui/todo_list_provider.dart';
 import 'package:life_schedule/themes/green_theme.dart';
 
-import 'config/navigation_config.dart';
-
 void main() => runApp(
-  const ProviderScope(child: LifeSchedule()),
-); // 使用 ProviderScope 引入 Riverpod
+      const ProviderScope(child: LifeSchedule()),
+    ); // 使用 ProviderScope 引入 Riverpod
 
 /// LifeSchedule
 /// 控制标题和应用主题内容
@@ -48,12 +48,19 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// 当前导航
-    final currentNavIndex = ref.watch(navigationIndexProvider);
-    final currentNav = appNavDestinations[currentNavIndex];
+    final selectedIndex = ref.watch(navigationIndexProvider);
+    final navigableScreens = ref
+        .watch(screenManifestProvider)
+        .whereType<NavigableScreenMixin>()
+        .toList();
+    final currentScreen = navigableScreens[selectedIndex];
+    final fabConfig = currentScreen is FabScreenMixin
+        ? (currentScreen as FabScreenMixin).fabConfig
+        : null;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentNav.label),
+        title: Text(currentScreen.navEntry.label),
         actions: const [
           IconButton(
             onPressed: null,
@@ -62,64 +69,18 @@ class MainScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: currentNav.screen,
+      body: currentScreen,
       bottomNavigationBar: const BottomNavBar(),
 
       // --- 核心改动 ---
       // 根据当前选中的页面索引，来决定显示哪个 FloatingActionButton
-      floatingActionButton: _buildFab(context, ref, currentNavIndex),
-    );
-  }
-
-  /// 一个辅助方法，用于根据页面索引构建对应的 FAB
-  Widget? _buildFab(BuildContext context, WidgetRef ref, int index) {
-    // 假设我们的“待办”页面在导航列表的第 0 个位置
-    if (index == 0) {
-      return FloatingActionButton(
-        tooltip: '添加待办',
-        onPressed: () {
-          // 这个方法现在需要从 TodoScreen 移动到这里，或者保持在 TodoScreen 中并设为 static
-          // 为了简单，我们直接在这里调用显示对话框的逻辑
-          _showAddTodoDialog(context, ref);
-        },
-        child: const Icon(Icons.add),
-      );
-    }
-    // 其他页面不显示 FAB
-    return null;
-  }
-
-  /// 将显示对话框的逻辑也放在 MainScreen 中，因为它现在是 FAB 的“主人”
-  void _showAddTodoDialog(BuildContext context, WidgetRef ref) {
-    final titleController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('新的待办事项'),
-          content: TextField(
-            controller: titleController,
-            autofocus: true,
-            decoration: const InputDecoration(hintText: '请输入标题'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('取消'),
-            ),
-            TextButton(
-              onPressed: () {
-                final title = titleController.text;
-                if (title.isNotEmpty) {
-                  ref.read(todoListProvider.notifier).addTodo(title);
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('添加'),
-            ),
-          ],
-        );
-      },
+      floatingActionButton: fabConfig != null
+          ? FloatingActionButton(
+              tooltip: fabConfig.tooltip,
+              onPressed: fabConfig.createOnPressed(context, ref),
+              child: fabConfig.child,
+            )
+          : null,
     );
   }
 }
@@ -130,14 +91,18 @@ class BottomNavBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(navigationIndexProvider);
+    final navigableScreens = ref
+        .watch(screenManifestProvider)
+        .whereType<NavigableScreenMixin>()
+        .toList();
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      items: appNavDestinations
+      items: navigableScreens
           .map(
             (destinations) => BottomNavigationBarItem(
-              icon: Icon(destinations.icon),
-              label: destinations.label,
+              icon: Icon(destinations.navEntry.icon),
+              label: destinations.navEntry.label,
             ),
           )
           .toList(),

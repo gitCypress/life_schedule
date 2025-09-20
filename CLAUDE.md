@@ -1,37 +1,67 @@
 # 工程结构
 
-这个结构保留了最基本的分离思想，但大大减少了文件夹数量和层级深度，非常容易上手。
+项目采用了Clean Architecture分层架构，确保代码的可维护性和可扩展性。
 
 ```
 lib/
-├── main.dart             # App入口，配置ProviderScope
+├── main.dart                    # App入口，配置ProviderScope
 │
-├── models/               # 存放所有的数据模型
-│   └── task_model.dart   # 比如Task类
+├── config/                      # 应用配置文件
+│   └── navigation_config.dart   # 导航配置（待重构为分散式）
 │
-├── providers/            # 存放所有的Riverpod Provider
-│   ├── task_provider.dart  # 任务相关的Provider
-│   └── auth_provider.dart  # 认证相关的Provider
+├── data/                        # 数据层
+│   ├── local/                   # 本地数据源
+│   │   ├── daos/               # 数据访问对象
+│   │   ├── tables/             # 数据库表定义
+│   │   └── database.dart       # 数据库配置
+│   └── repository/             # 仓库实现
+│       └── todo_repository.dart
 │
-├── screens/              # 存放所有的页面/屏幕UI
-│   ├── tasks/
-│   │   └── task_list_screen.dart
-│   └── auth/
-│       └── login_screen.dart
+├── domain/                      # 领域层
+│   └── entities/               # 业务实体
+│       └── todo.dart
 │
-├── services/             # 存放所有的“服务”逻辑
-│   ├── task_service.dart   # 任务相关的所有数据操作（本地+远程）
-│   └── api_service.dart    # Dio的封装和配置
+├── models/                      # 数据传输对象和UI模型
+│   └── nav_destination.dart    # 导航目标模型
 │
-└── widgets/              # 存放通用的、可复用的UI组件
-    └── custom_app_bar.dart
+├── providers/                   # Riverpod状态管理
+│   ├── data/                   # 数据相关Provider
+│   │   ├── dao_providers.dart
+│   │   ├── database_provider.dart
+│   │   └── repository_providers.dart
+│   └── ui/                     # UI状态Provider
+│       ├── navigation_provider.dart
+│       ├── theme_provider.dart
+│       └── todo_list_provider.dart
+│
+├── screens/                     # 页面/屏幕UI
+│   ├── todo_screen.dart
+│   ├── calender_screen.dart
+│   ├── expense_tracking_screen.dart
+│   └── settings_screen.dart
+│
+├── services/                    # 业务服务层
+│   └── (待扩展)
+│
+├── themes/                      # 主题配置
+│   └── green_theme.dart
+│
+└── widgets/                     # 通用UI组件
+    └── example/
+        └── custom_button.dart
 ```
 
-**如何使用这个简化结构：**
+**各层职责说明：**
 
-  * **`models/`**: 不区分 `entity` 和 `dto`，暂时都放在这里。
-  * **`screens/`**: 你的UI，使用 `ConsumerWidget` 来 `watch` `providers/` 里的状态。
-  * **`providers/`**: 你的状态管理中心，负责调用 `services/` 里的方法来获取或修改数据，并管理UI状态。
-  * **`services/`**: 这是关键的简化。我们**暂时不分 `Repository` 和 `DataSource`**。比如 `TaskService` 这个类，就直接负责调用 `Dio` 请求网络、调用 `Drift/Isar` 操作数据库，并把数据处理好，返回给 `Provider`。它融合了之前复杂架构中 `Infrastructure` 和部分 `Domain` 的职责。
+  * **`domain/entities/`**: 核心业务实体，不依赖任何外部框架
+  * **`data/`**: 数据层，包含Repository实现、DAO、数据库配置
+  * **`models/`**: UI数据传输对象，主要服务于展示层
+  * **`providers/`**: Riverpod状态管理，分为数据层和UI层Provider
+  * **`screens/`**: 页面UI，使用ConsumerWidget监听Provider状态
+  * **`services/`**: 业务服务层，处理复杂业务逻辑
+  * **`config/`**: 应用级配置文件
 
-这个结构足够清晰，能够支撑你完成应用的核心功能，并且在未来也很容易向更完善的架构迁移。
+**架构原则：**
+- 依赖倒置：上层不依赖下层具体实现
+- 单一职责：每个文件/类只负责一个职责
+- 分离关注点：UI、业务逻辑、数据访问分离

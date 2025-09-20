@@ -4,7 +4,16 @@
       "Bash(mkdir:*)",
       "Bash(dart run build_runner:*)",
       "Bash(flutter:*)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "Bash(dart:*)",
+      "Bash(claude --version)",
+      "Read(//e/Flutter/**)",
+      "Bash(npx flutter-mcp:*)",
+      "Bash(claude mcp:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Read(//c/Users/27301/AppData/Roaming/npm/node_modules/flutter-mcp/**)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
