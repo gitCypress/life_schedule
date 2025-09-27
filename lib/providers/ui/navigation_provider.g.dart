@@ -41,7 +41,7 @@ final class NavigationIndexProvider
   }
 }
 
-String _$navigationIndexHash() => r'ae19e410d989f7b3961770d92946ea631807af9e';
+String _$navigationIndexHash() => r'1713e2d2db7331229bd69f0b3bd576a4197323fa';
 
 abstract class _$NavigationIndex extends $Notifier<int> {
   int build();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:life_schedule/mixins/fab_screen_mixin.dart';
 import 'package:life_schedule/mixins/navigable_screen_mixin.dart';
+import 'package:life_schedule/models/f_screen.dart';
 
 import 'package:life_schedule/providers/ui/navigation_provider.dart';
 import 'package:life_schedule/providers/ui/screen_manifest_provider.dart';
@@ -49,14 +50,15 @@ class MainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     /// 当前导航
     final selectedIndex = ref.watch(navigationIndexProvider);
-    final navigableScreens = ref
-        .watch(screenManifestProvider)
-        .whereType<NavigableScreenMixin>()
+    final navigableFS = ref
+        .watch(fScreenManifestProvider)
+        .whereType<FScreen<NavigableScreenMixin>>()
         .toList();
-    final currentScreen = navigableScreens[selectedIndex];
-    final fabConfig = currentScreen is FabScreenMixin
-        ? (currentScreen as FabScreenMixin).fabConfig
-        : null;
+    final currentScreen = navigableFS[selectedIndex].builder();
+    final fabConfig = switch (currentScreen) {
+      FabScreenMixin fabscreen => fabscreen.fabConfig,
+      _ => null,
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -92,8 +94,9 @@ class BottomNavBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(navigationIndexProvider);
     final navigableScreens = ref
-        .watch(screenManifestProvider)
-        .whereType<NavigableScreenMixin>()
+        .watch(fScreenManifestProvider)
+        .whereType<FScreen<NavigableScreenMixin>>()
+        .map((f) => f.builder())
         .toList();
 
     return BottomNavigationBar(

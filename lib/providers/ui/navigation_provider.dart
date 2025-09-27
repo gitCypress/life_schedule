@@ -6,9 +6,7 @@ part 'navigation_provider.g.dart';
 @riverpod
 class NavigationIndex extends _$NavigationIndex {
   @override
-  int build() {
-    return 0;
-  }
+  int build() => 0;
 
   void setIndex(int newIndex) {
     state = newIndex;

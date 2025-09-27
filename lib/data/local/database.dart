@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -27,7 +28,11 @@ class AppDatabase extends _$AppDatabase {
 }
 
 LazyDatabase _openConnection() => LazyDatabase(() async {
-  final dbFolder = await getApplicationDocumentsDirectory();
+  // 使用应用数据目录而不是文档目录
+  final dbFolder = await getApplicationSupportDirectory();
   final file = File(p.join(dbFolder.path, 'app_db.sqlite'));
+  if (kDebugMode) {
+    print('Database path: ${file.path}');
+  }
   return NativeDatabase.createInBackground(file);
 });
