@@ -12,6 +12,7 @@ part 'tables/todo_items_table.dart';
 
 part 'daos/todo_items_dao.dart';
 
+// TODO: 考虑前置数据库的初始化
 @DriftDatabase(tables: [TodoItems], daos: [TodoItemsDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());

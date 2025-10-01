@@ -16,7 +16,7 @@ class TodoList extends _$TodoList {
     return _repository.watchAllTodos();
   }
 
-  Future<void> addTodo(String title, {String? content}) async {
+  Future<void> addTodo({required String title, String? content}) async {
     final newTodo = Todo(
       title: title,
       content: content,
@@ -26,9 +26,13 @@ class TodoList extends _$TodoList {
     await _repository.addTodo(newTodo);
   }
 
+  Future<void> updateTodo(Todo todo) async {
+    await _repository.updateTodo(todo);
+  }
+
   Future<void> toggleTodoStatus(Todo todo) async {
     final updatedTodo = todo.copyWith(isFinished: !todo.isFinished);
-    await _repository.updateTodo(updatedTodo);
+    await updateTodo(updatedTodo);
   }
 
   Future<void> deleteTodo(Todo todo) async {

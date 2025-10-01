@@ -33,7 +33,7 @@ final class TodoListProvider
   TodoList create() => TodoList();
 }
 
-String _$todoListHash() => r'3857d6e430f3f93cec2272eae15ed012dd8d6f4b';
+String _$todoListHash() => r'73f7cba03e2a555022aa5e6904f242bf1ca9c14a';
 
 abstract class _$TodoList extends $StreamNotifier<List<Todo>> {
   Stream<List<Todo>> build();

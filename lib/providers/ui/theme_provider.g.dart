@@ -12,8 +12,7 @@ part of 'theme_provider.dart';
 @ProviderFor(ThemeCustom)
 const themeCustomProvider = ThemeCustomProvider._();
 
-final class ThemeCustomProvider
-    extends $AsyncNotifierProvider<ThemeCustom, bool> {
+final class ThemeCustomProvider extends $NotifierProvider<ThemeCustom, bool> {
   const ThemeCustomProvider._()
       : super(
           from: null,
@@ -31,22 +30,27 @@ final class ThemeCustomProvider
   @$internal
   @override
   ThemeCustom create() => ThemeCustom();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
 }
 
-String _$themeCustomHash() => r'2c31674f50807d08a5497850a790e005f711f9c7';
+String _$themeCustomHash() => r'ad35084605d35d68c28960576aaf4cd5ffb19151';
 
-abstract class _$ThemeCustom extends $AsyncNotifier<bool> {
-  FutureOr<bool> build();
+abstract class _$ThemeCustom extends $Notifier<bool> {
+  bool build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
+    final ref = this.ref as $Ref<bool, bool>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<AsyncValue<bool>, bool>,
-        AsyncValue<bool>,
-        Object?,
-        Object?>;
+        AnyNotifier<bool, bool>, bool, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

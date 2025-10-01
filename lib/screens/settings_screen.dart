@@ -25,7 +25,7 @@ class SettingsScreen extends ConsumerWidget with NavigableScreenMixin {
           secondary: const Icon(Icons.dark_mode_outlined),
           title: const Text('暗色模式'),
           subtitle: const Text('开启或关闭暗色主题'),
-          value: isDarkMode.asData?.value ?? false,
+          value: isDarkMode,
           onChanged: (value) {
             ref.read(themeCustomProvider.notifier).toggleTheme();
           },
