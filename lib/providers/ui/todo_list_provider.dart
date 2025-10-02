@@ -38,4 +38,6 @@ class TodoList extends _$TodoList {
   Future<void> deleteTodo(Todo todo) async {
     await _repository.deleteTodo(todo);
   }
+
+  Future<Todo?> getTodoById(int id) async => _repository.getTodoById(id);
 }

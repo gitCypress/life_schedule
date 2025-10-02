@@ -21,6 +21,16 @@ class TodoRepository {
 
   Future<void> deleteTodo(Todo todo) =>
       _todoItemsDao.delete(_todoItemsDao.todoItems).delete(todo.toCompanion());
+
+  Future<Todo?> getTodoById(int id) async {
+    try {
+      final item = await _todoItemsDao.getTodoById(id);
+      return item.toDomain();
+    } catch (e) {
+      return null;
+    }
+  }
+
 }
 
 extension on TodoItem {
