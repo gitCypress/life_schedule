@@ -7,7 +7,6 @@ import 'package:life_schedule/screens/settings_screen.dart';
 import 'package:life_schedule/screens/todo_edit_screen.dart';
 import 'package:life_schedule/screens/todo_screen.dart';
 import 'package:life_schedule/widgets/main_scaffold/main_scaffold.dart';
-import 'package:life_schedule/domain/entities/todo.dart';
 
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

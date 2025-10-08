@@ -135,7 +135,7 @@ extension TodoEditModePatterns on TodoEditMode {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? create,
-    TResult Function(Todo todo)? edit,
+    TResult Function(int todoId)? edit,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -143,7 +143,7 @@ extension TodoEditModePatterns on TodoEditMode {
       case CreateTodoMode() when create != null:
         return create();
       case ModifyTodoMode() when edit != null:
-        return edit(_that.todo);
+        return edit(_that.todoId);
       case _:
         return orElse();
     }
@@ -165,14 +165,14 @@ extension TodoEditModePatterns on TodoEditMode {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() create,
-    required TResult Function(Todo todo) edit,
+    required TResult Function(int todoId) edit,
   }) {
     final _that = this;
     switch (_that) {
       case CreateTodoMode():
         return create();
       case ModifyTodoMode():
-        return edit(_that.todo);
+        return edit(_that.todoId);
     }
   }
 
@@ -191,14 +191,14 @@ extension TodoEditModePatterns on TodoEditMode {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? create,
-    TResult? Function(Todo todo)? edit,
+    TResult? Function(int todoId)? edit,
   }) {
     final _that = this;
     switch (_that) {
       case CreateTodoMode() when create != null:
         return create();
       case ModifyTodoMode() when edit != null:
-        return edit(_that.todo);
+        return edit(_that.todoId);
       case _:
         return null;
     }
@@ -228,9 +228,9 @@ class CreateTodoMode implements TodoEditMode {
 /// @nodoc
 
 class ModifyTodoMode implements TodoEditMode {
-  const ModifyTodoMode({required this.todo});
+  const ModifyTodoMode({required this.todoId});
 
-  final Todo todo;
+  final int todoId;
 
   /// Create a copy of TodoEditMode
   /// with the given fields replaced by the non-null parameter values.
@@ -244,15 +244,15 @@ class ModifyTodoMode implements TodoEditMode {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ModifyTodoMode &&
-            (identical(other.todo, todo) || other.todo == todo));
+            (identical(other.todoId, todoId) || other.todoId == todoId));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, todo);
+  int get hashCode => Object.hash(runtimeType, todoId);
 
   @override
   String toString() {
-    return 'TodoEditMode.edit(todo: $todo)';
+    return 'TodoEditMode.edit(todoId: $todoId)';
   }
 }
 
@@ -263,9 +263,7 @@ abstract mixin class $ModifyTodoModeCopyWith<$Res>
           ModifyTodoMode value, $Res Function(ModifyTodoMode) _then) =
       _$ModifyTodoModeCopyWithImpl;
   @useResult
-  $Res call({Todo todo});
-
-  $TodoCopyWith<$Res> get todo;
+  $Res call({int todoId});
 }
 
 /// @nodoc
@@ -280,24 +278,14 @@ class _$ModifyTodoModeCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? todo = null,
+    Object? todoId = null,
   }) {
     return _then(ModifyTodoMode(
-      todo: null == todo
-          ? _self.todo
-          : todo // ignore: cast_nullable_to_non_nullable
-              as Todo,
+      todoId: null == todoId
+          ? _self.todoId
+          : todoId // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
-  }
-
-  /// Create a copy of TodoEditMode
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TodoCopyWith<$Res> get todo {
-    return $TodoCopyWith<$Res>(_self.todo, (value) {
-      return _then(_self.copyWith(todo: value));
-    });
   }
 }
 

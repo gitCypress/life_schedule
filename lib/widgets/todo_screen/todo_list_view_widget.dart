@@ -31,7 +31,7 @@ class _TodoListTile extends ConsumerWidget {
         leading: Checkbox(
           value: todo.isFinished,
           onChanged: (value) {
-            ref.read(todoListProvider.notifier).toggleTodoStatus(todo);
+            ref.read(todoActionProvider.notifier).toggleTodoStatus(todo);
           },
         ),
         title: Text(
@@ -48,14 +48,14 @@ class _TodoListTile extends ConsumerWidget {
         trailing: IconButton(
           icon: const Icon(Icons.delete_outline),
           onPressed: () {
-            ref.read(todoListProvider.notifier).deleteTodo(todo);
+            ref.read(todoActionProvider.notifier).deleteTodo(todo);
           },
         ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => TodoEditScreen(
-                mode: TodoEditMode.edit(todo: todo),
+                mode: TodoEditMode.edit(todoId: todo.id!),
               ),
             ),
           );

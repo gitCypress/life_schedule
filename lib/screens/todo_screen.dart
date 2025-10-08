@@ -21,7 +21,7 @@ class TodoScreen extends ConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todoListState = ref.watch(todoListProvider);
+    final todoListState = ref.watch(todosStreamProvider);
 
     return todoListState.when(
       data: (todos) => switch (todos.isEmpty) {

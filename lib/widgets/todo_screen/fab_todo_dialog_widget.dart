@@ -62,7 +62,7 @@ class FabTodoDialogWidget extends ConsumerWidget {
                 onPressed: () {
                   final title = titleController.text;
                   if (title.isNotEmpty) {
-                    ref.read(todoListProvider.notifier).addTodo(
+                    ref.read(todoActionProvider.notifier).addTodo(
                           title: title,
                           content: contentController.text.isNotEmpty
                               ? contentController.text

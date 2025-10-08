@@ -7,14 +7,23 @@ import '../../domain/entities/todo.dart';
 part 'todo_list_provider.g.dart';
 
 @riverpod
-class TodoList extends _$TodoList {
+Stream<List<Todo>> todosStream(Ref ref) {
+  final repository = ref.watch(todoRepositoryProvider);
+  return repository.watchAllTodos();
+}
+
+@riverpod
+Future<Todo?> todoById(Ref ref, int todoId)  {
+  final repository = ref.watch(todoRepositoryProvider);
+  return repository.getTodoById(todoId);
+}
+
+@riverpod
+class TodoAction extends _$TodoAction {
   late final TodoRepository _repository;
 
   @override
-  Stream<List<Todo>> build() {
-    _repository = ref.watch(todoRepositoryProvider);
-    return _repository.watchAllTodos();
-  }
+  void build() => throw Exception("Unexpected usage.");
 
   Future<void> addTodo({required String title, String? content}) async {
     final newTodo = Todo(
@@ -38,6 +47,4 @@ class TodoList extends _$TodoList {
   Future<void> deleteTodo(Todo todo) async {
     await _repository.deleteTodo(todo);
   }
-
-  Future<Todo?> getTodoById(int id) async => _repository.getTodoById(id);
 }
