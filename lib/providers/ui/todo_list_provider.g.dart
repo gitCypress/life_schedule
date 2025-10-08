@@ -146,7 +146,7 @@ final class TodoActionProvider extends $NotifierProvider<TodoAction, void> {
   }
 }
 
-String _$todoActionHash() => r'ecd8285ee36d3ac402f3b334022a3e0837fb291d';
+String _$todoActionHash() => r'9ffa0826189e25baae57ffc875ceea89952b6960';
 
 abstract class _$TodoAction extends $Notifier<void> {
   void build();

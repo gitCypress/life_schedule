@@ -55,18 +55,11 @@ class _TodoFloatingActionButtonConfig implements FloatingActionButtonConfig {
       };
 
   void _showAddTodoDialog(BuildContext context, WidgetRef ref) {
-    final titleController = TextEditingController();
-    final contentController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) {
-        return FabTodoDialogWidget(
-            titleController: titleController,
-            contentController: contentController);
+        return const FabTodoDialogWidget();
       },
-    ).then((_) {
-      titleController.dispose();
-      contentController.dispose();
-    });
+    );
   }
 }

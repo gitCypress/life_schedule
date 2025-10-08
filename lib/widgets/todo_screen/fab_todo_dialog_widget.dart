@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../models/ui_state/todo_edit_mode.dart';
 import '../../providers/ui/todo_list_provider.dart';
 import '../../screens/todo_edit_screen.dart';
 
-class FabTodoDialogWidget extends ConsumerWidget {
-  const FabTodoDialogWidget(
-      {super.key,
-      required this.titleController,
-      required this.contentController});
-
-  final TextEditingController titleController;
-  final TextEditingController contentController;
+class FabTodoDialogWidget extends HookConsumerWidget {
+  const FabTodoDialogWidget({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => AlertDialog(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final titleController = useTextEditingController();
+    final contentController = useTextEditingController();
+
+    return AlertDialog(
         title: const Text('创建待办事项'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -77,4 +76,5 @@ class FabTodoDialogWidget extends ConsumerWidget {
           ),
         ],
       );
+  }
 }

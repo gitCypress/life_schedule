@@ -23,7 +23,9 @@ class TodoAction extends _$TodoAction {
   late final TodoRepository _repository;
 
   @override
-  void build() => throw Exception("Unexpected usage.");
+  void build() {
+    _repository = ref.watch(todoRepositoryProvider);
+  }
 
   Future<void> addTodo({required String title, String? content}) async {
     final newTodo = Todo(
