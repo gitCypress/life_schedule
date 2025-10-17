@@ -57,6 +57,14 @@ $pubspec = Get-Content .\pubspec.yaml
 $appName = ($pubspec | Select-String -Pattern "^name:").ToString().Split(':')[1].Trim()
 $version = ($pubspec | Select-String -Pattern "^version:").ToString().Split(':')[1].Trim()
 
+# --- 新增功能：询问是否需要自动锁屏 ---
+$lockScreenOptions = @{
+    "n" = "否 (No)"
+    "y" = "是 (Yes)"
+}
+$shouldLockScreen = Show-Menu -Title "构建成功后是否自动锁定屏幕？" -Options $lockScreenOptions -DefaultKey "n"
+# ------------------------------------
+
 $buildTypeOptions = @{
     "release" = "Release (用于发布的已签名、优化版)"
     "debug"   = "Debug (用于测试的未签名版)"
@@ -91,6 +99,7 @@ Write-Host "  应用名      : $appName"
 Write-Host "  版本号      : $version"
 Write-Host "  构建类型    : $buildType"
 Write-Host "  CPU 架构    : $archSuffix"
+Write-Host "  自动锁屏    : $($lockScreenOptions[$shouldLockScreen])" # 显示锁屏选项
 Write-Host "  最终输出路径: $outputPath"
 Write-Host "=================================================="
 
@@ -122,6 +131,16 @@ if (Test-Path $sourceApkPath) {
     Move-Item -Path $sourceApkPath -Destination $outputPath -Force
     Write-Host "`n🎉 构建成功!"
     Write-Host "[OK] APK 已保存至: $outputPath"
+
+    # --- 新增功能：根据选择执行锁屏 ---
+    if ($shouldLockScreen -eq "y") {
+        Write-Host "--> 3秒后将自动锁定屏幕..."
+        Start-Sleep -Seconds 3
+        # 调用 Windows 系统 DLL 来执行锁屏
+        rundll32.exe user32.dll, LockWorkStation
+    }
+    # ------------------------------------
+
 } else {
     # 如果源文件不存在，说明 Flutter 构建可能失败了
     throw "[错误] 未找到生成的 APK 文件！请检查上面的 Flutter 构建日志是否存在错误。"
