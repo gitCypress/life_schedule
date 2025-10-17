@@ -134,14 +134,14 @@ extension TodoEditModePatterns on TodoEditMode {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? create,
+    TResult Function(Todo? initialTodo)? create,
     TResult Function(int todoId)? edit,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case CreateTodoMode() when create != null:
-        return create();
+        return create(_that.initialTodo);
       case ModifyTodoMode() when edit != null:
         return edit(_that.todoId);
       case _:
@@ -164,13 +164,13 @@ extension TodoEditModePatterns on TodoEditMode {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() create,
+    required TResult Function(Todo? initialTodo) create,
     required TResult Function(int todoId) edit,
   }) {
     final _that = this;
     switch (_that) {
       case CreateTodoMode():
-        return create();
+        return create(_that.initialTodo);
       case ModifyTodoMode():
         return edit(_that.todoId);
     }
@@ -190,13 +190,13 @@ extension TodoEditModePatterns on TodoEditMode {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? create,
+    TResult? Function(Todo? initialTodo)? create,
     TResult? Function(int todoId)? edit,
   }) {
     final _that = this;
     switch (_that) {
       case CreateTodoMode() when create != null:
-        return create();
+        return create(_that.initialTodo);
       case ModifyTodoMode() when edit != null:
         return edit(_that.todoId);
       case _:
@@ -208,20 +208,81 @@ extension TodoEditModePatterns on TodoEditMode {
 /// @nodoc
 
 class CreateTodoMode implements TodoEditMode {
-  const CreateTodoMode();
+  const CreateTodoMode({required this.initialTodo});
+
+  final Todo? initialTodo;
+
+  /// Create a copy of TodoEditMode
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $CreateTodoModeCopyWith<CreateTodoMode> get copyWith =>
+      _$CreateTodoModeCopyWithImpl<CreateTodoMode>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is CreateTodoMode);
+        (other.runtimeType == runtimeType &&
+            other is CreateTodoMode &&
+            (identical(other.initialTodo, initialTodo) ||
+                other.initialTodo == initialTodo));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, initialTodo);
 
   @override
   String toString() {
-    return 'TodoEditMode.create()';
+    return 'TodoEditMode.create(initialTodo: $initialTodo)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $CreateTodoModeCopyWith<$Res>
+    implements $TodoEditModeCopyWith<$Res> {
+  factory $CreateTodoModeCopyWith(
+          CreateTodoMode value, $Res Function(CreateTodoMode) _then) =
+      _$CreateTodoModeCopyWithImpl;
+  @useResult
+  $Res call({Todo? initialTodo});
+
+  $TodoCopyWith<$Res>? get initialTodo;
+}
+
+/// @nodoc
+class _$CreateTodoModeCopyWithImpl<$Res>
+    implements $CreateTodoModeCopyWith<$Res> {
+  _$CreateTodoModeCopyWithImpl(this._self, this._then);
+
+  final CreateTodoMode _self;
+  final $Res Function(CreateTodoMode) _then;
+
+  /// Create a copy of TodoEditMode
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? initialTodo = freezed,
+  }) {
+    return _then(CreateTodoMode(
+      initialTodo: freezed == initialTodo
+          ? _self.initialTodo
+          : initialTodo // ignore: cast_nullable_to_non_nullable
+              as Todo?,
+    ));
+  }
+
+  /// Create a copy of TodoEditMode
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TodoCopyWith<$Res>? get initialTodo {
+    if (_self.initialTodo == null) {
+      return null;
+    }
+
+    return $TodoCopyWith<$Res>(_self.initialTodo!, (value) {
+      return _then(_self.copyWith(initialTodo: value));
+    });
   }
 }
 

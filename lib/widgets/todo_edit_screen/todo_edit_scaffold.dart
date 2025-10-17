@@ -7,16 +7,16 @@ import '../../domain/entities/todo.dart';
 import '../../providers/ui/todo_list_provider.dart';
 
 class TodoEditScaffold extends HookConsumerWidget {
-  const TodoEditScaffold.edit({
+  const TodoEditScaffold({
     super.key,
     required this.initialTodo,
   });
 
-  const TodoEditScaffold.create({
-    super.key,
-  }) : initialTodo = null;
-
   final Todo? initialTodo;
+
+  /// 是否为编辑模式（而非新建模式）
+  /// 判断依据：initialTodo 存在且具有有效的 id
+  bool get isEditMode => initialTodo != null && initialTodo!.id != null;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,10 @@ class TodoEditScaffold extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(initialTodo == null ? '新建待办' : '编辑待办'),
+        leading: BackButton(
+          onPressed: () => context.pop(),
+        ),
+        title: Text(isEditMode ? '编辑待办' : '新建待办'),
         actions: [
           IconButton(
             onPressed: () => _handleSave(
@@ -63,17 +66,19 @@ class TodoEditScaffold extends HookConsumerWidget {
 
     final actionsNotifier = ref.read(todoActionProvider.notifier);
 
-    if (initialTodo == null) {
-      actionsNotifier.addTodo(
-        title: title,
-        content: content,
-      );
-    } else {
+    if (isEditMode) {
+      // 编辑模式：更新现有待办
       final updatedTodo = initialTodo!.copyWith(
         title: title,
         content: content,
       );
       actionsNotifier.updateTodo(updatedTodo);
+    } else {
+      // 新建模式：创建新待办
+      actionsNotifier.addTodo(
+        title: title,
+        content: content,
+      );
     }
 
     context.pop();

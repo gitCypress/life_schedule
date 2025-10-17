@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:life_schedule/models/ui_state/todo_edit_mode.dart';
-import 'package:life_schedule/screens/todo_edit_screen.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/todo.dart';
 import '../../providers/ui/todo_list_provider.dart';
@@ -52,12 +51,11 @@ class _TodoListTile extends ConsumerWidget {
           },
         ),
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => TodoEditScreen(
-                mode: TodoEditMode.edit(todoId: todo.id!),
-              ),
-            ),
+          context.goNamed(
+            'editTodo',
+            pathParameters: {
+              'id': todo.id.toString(),
+            },
           );
         },
       );

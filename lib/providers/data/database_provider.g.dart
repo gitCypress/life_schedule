@@ -8,13 +8,26 @@ part of 'database_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// 数据库 Provider
+///
+/// 注意：应该在 main() 中通过 AppDatabase.initialize() 预初始化数据库，
+/// 然后使用 override 注入已初始化的实例
 
 @ProviderFor(appDatabase)
 const appDatabaseProvider = AppDatabaseProvider._();
 
+/// 数据库 Provider
+///
+/// 注意：应该在 main() 中通过 AppDatabase.initialize() 预初始化数据库，
+/// 然后使用 override 注入已初始化的实例
+
 final class AppDatabaseProvider
     extends $FunctionalProvider<AppDatabase, AppDatabase, AppDatabase>
     with $Provider<AppDatabase> {
+  /// 数据库 Provider
+  ///
+  /// 注意：应该在 main() 中通过 AppDatabase.initialize() 预初始化数据库，
+  /// 然后使用 override 注入已初始化的实例
   const AppDatabaseProvider._()
       : super(
           from: null,
@@ -48,4 +61,4 @@ final class AppDatabaseProvider
   }
 }
 
-String _$appDatabaseHash() => r'98a09c6cfd43966155dfbdb0787fa18c85438e13';
+String _$appDatabaseHash() => r'21b5b23479b7abc176296d7aa7d7512cfa5b6fb2';

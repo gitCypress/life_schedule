@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:life_schedule/mixins/navigable_screen_mixin.dart';
-import 'package:life_schedule/models/navigation_entry.dart';
 
 import '../providers/ui/theme_provider.dart';
 import '../providers/ui/app_info_provider.dart';
 
-class SettingsScreen extends ConsumerWidget with NavigableScreenMixin {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-
-  @override
-  NavigationEntry get navEntry => _SettingsNavigationEntry();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,12 +61,4 @@ class _SettingsHeader extends StatelessWidget {
           )),
     );
   }
-}
-
-class _SettingsNavigationEntry implements NavigationEntry {
-  @override
-  IconData get icon => Icons.settings_outlined;
-
-  @override
-  String get label => '设置';
 }

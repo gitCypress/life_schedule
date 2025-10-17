@@ -5,13 +5,16 @@ import 'package:life_schedule/providers/ui/todo_list_provider.dart';
 import 'package:life_schedule/widgets/todo_edit_screen/todo_edit_scaffold.dart';
 
 class TodoEditScreen extends HookConsumerWidget {
-  const TodoEditScreen({super.key, required this.mode});
+  const TodoEditScreen({
+    super.key,
+    required this.mode,
+  });
 
   final TodoEditMode mode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => mode.when(
-      create: () => const TodoEditScaffold.create(),
+      create: (initialTodo) => TodoEditScaffold(initialTodo: initialTodo),
       edit: (todoId) {
         final todo = ref.watch(todoByIdProvider(todoId));
         return todo.when(
@@ -21,7 +24,9 @@ class TodoEditScreen extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   Text("加载中"),
                 ],
               ),
@@ -41,7 +46,7 @@ class TodoEditScreen extends HookConsumerWidget {
                 ),
               );
             }
-            return TodoEditScaffold.edit(initialTodo: todo);
+            return TodoEditScaffold(initialTodo: todo);
           },
         );
       });
