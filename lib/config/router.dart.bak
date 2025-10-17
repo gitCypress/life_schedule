@@ -1,76 +1,65 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:life_schedule/models/ui_state/todo_edit_mode.dart';
+import 'package:life_schedule/screens/calendar_screen.dart';
 import 'package:life_schedule/screens/expense_tracking_screen.dart';
 import 'package:life_schedule/screens/settings_screen.dart';
 import 'package:life_schedule/screens/todo_edit_screen.dart';
 import 'package:life_schedule/screens/todo_screen.dart';
 import 'package:life_schedule/widgets/main_scaffold/main_scaffold.dart';
 
-import '../screens/calendar_screen.dart';
-
+final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
   routes: [
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) => MainScaffold(
-        navigationShell: navigationShell,
-      ),
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/', // 这是第一个 tab 的路径，也是应用的初始路径
+    ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) => const MainScaffold(),
+        routes: [
+          GoRoute(
+              path: '/',
               name: 'todo',
               builder: (context, state) => const TodoScreen(),
-              // 2. 将 create 和 edit 作为 TodoScreen 的子路由
               routes: [
                 GoRoute(
-                  path: 'create-todo', // 相对路径，实际为 /create-todo
+                  path: 'create-todo',
                   name: 'createTodo',
-                  parentNavigatorKey: _rootNavigatorKey, // 保持全屏逻辑
+                  parentNavigatorKey: _rootNavigatorKey,
                   builder: (context, state) =>
                       const TodoEditScreen(mode: TodoEditMode.create()),
                 ),
                 GoRoute(
-                  path: 'edit-todo/:id', // 相对路径，实际为 /edit-todo/:id
-                  name: 'editTodo', // 3. 修正重复的 name
-                  parentNavigatorKey: _rootNavigatorKey, // 保持全屏逻辑
+                  path: 'edit-todo/:id',
+                  name: 'editTodo',
+                  parentNavigatorKey: _rootNavigatorKey,
                   builder: (context, state) {
                     final todoId = int.tryParse(state.pathParameters['id']!);
+
+                    // TODO: 添加更合适的错误页面，应对 Web 情况下手动修改 id 部分的行为
                     if (todoId == null) return const TodoScreen();
-                    return TodoEditScreen(mode: TodoEditMode.edit(todoId: todoId));
+                    return TodoEditScreen(
+                        mode: TodoEditMode.edit(todoId: todoId));
                   },
                 ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(routes: [
+              ]),
           GoRoute(
             path: '/calendar',
             name: 'calender',
             builder: (context, state) => const CalendarScreen(),
           ),
-        ]),
-        StatefulShellBranch(routes: [
           GoRoute(
-            path: '/expense',
+            path: '/expense-tracking',
             name: 'expenseTracking',
             builder: (context, state) => const ExpenseTrackingScreen(),
           ),
-        ]),
-        StatefulShellBranch(routes: [
           GoRoute(
             path: '/settings',
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
           ),
-        ]),
-      ],
-    ),
+        ])
   ],
 );
